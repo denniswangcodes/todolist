@@ -23,7 +23,12 @@ function App() {
     console.log('newTodos', JSON.stringify(todos))
   }, [todos])
 
-  
+  function toggleTodo(id) {
+    const newTodos = [...todos];
+    const todo = newTodos.find(todo => todo.id = id)
+    todo.complete = !todo.complete;
+    setTodos(newTodos)
+  }
 
   function handleAddTodo(e) {
     const name = todoNameRef.current.value;
@@ -34,14 +39,23 @@ function App() {
     todoNameRef.current.value = null;
   }
 
+  function handleClearComplete() {
+    const newTodos = todos.filter(todo => !todo.complete);
+    setTodos(newTodos);
+  }
+
+  function handleClearAll() {
+    setTodos([]);
+  }
+
   return (
     <>
       <input ref={todoNameRef} type="text" />
       <button onClick={handleAddTodo}>Add Todo</button>
-      <button>Clear Todo</button>
-      <button>Clear Complete</button><br></br>
-      There are {todos.length} todos. <br></br><br></br>
-      <TodoList todos={todos} />
+      <button onClick={handleClearComplete}>Clear Complete</button>
+      <button onClick={handleClearAll}>Clear All</button><br></br>
+      <div>There are {todos.filter(todo => !todo.complete).length} todos left.</div> <br></br><br></br>
+      <TodoList todos={todos} toggleTodo={toggleTodo} />
     </>
   )
 }
